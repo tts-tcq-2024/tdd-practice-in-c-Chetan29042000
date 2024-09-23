@@ -4,7 +4,7 @@
 #include <ctype.h>
 
 int add(const char* input) {
-    if (strlen(input) == 0) {
+    if (input == NULL || strlen(input) == 0) {
         return 0;
     }
 }
