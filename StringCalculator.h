@@ -18,4 +18,16 @@ int add(const char* input) {
     if (input == NULL || strlen(input) == 0) {
         return 0;
     }
+    char delimiters[32] = ",\n";
+    const char* numbersStart = input;
+
+    // Check if custom delimiter is provided
+    if (strncmp(input, "//", 2) == 0) {
+        const char* delimiterEnd = strstr(input, "\n");
+        if (delimiterEnd != NULL) {
+            strncpy(delimiters, input + 2, delimiterEnd - (input + 2));
+            delimiters[delimiterEnd - (input + 2)] = '\0';
+            numbersStart = delimiterEnd + 1;
+        }
+    }
 }
