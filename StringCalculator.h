@@ -39,30 +39,36 @@ int sum_tokens(char* input_copy, const char* delimiters) {
     return sum;
 }
 
+// Helper function to prepare input for processing
+char* prepare_input(const char* input, const char** delimiters) {
+    char* input_copy = strdup(input);  // Duplicate input string
+    if (strncmp(input, "//", 2) == 0) {
+        char* remaining_input;
+        const char* custom_delimiter = get_custom_delimiter(input, &remaining_input);
+        if (custom_delimiter) {
+            *delimiters = custom_delimiter;  // Use the custom delimiter
+            return remaining_input;  // Use the remaining input
+        }
+    }
+    *delimiters = ",\n";  // Default delimiters
+    return input_copy;  // No custom delimiter, return duplicated input
+}
+
 // Function to add numbers in a string
 int add(const char* input) {
     if (!is_valid_input(input)) {
         return 0;  // Return 0 for an empty string or invalid first character
     }
 
-    char* input_copy;
-    const char* delimiters = ",\n";  // Default delimiters: comma and newline
-
-    if (strncmp(input, "//", 2) == 0) {
-        char* remaining_input;
-        const char* custom_delimiter = get_custom_delimiter(input, &remaining_input);
-        if (custom_delimiter) {
-            delimiters = custom_delimiter;  // Use the custom delimiter
-            input_copy = remaining_input;  // Use the remaining input
-            free((void*)custom_delimiter);  // Free the custom delimiter
-        } else {
-            input_copy = strdup(input);  // Fallback to original input
-        }
-    } else {
-        input_copy = strdup(input);  // No custom delimiter, just duplicate the input
-    }
+    const char* delimiters;  
+    char* input_copy = prepare_input(input, &delimiters);  // Prepare input for processing
 
     int result = sum_tokens(input_copy, delimiters);  // Calculate the sum of the tokens
+
     free(input_copy);  // Free the duplicated string
+    if (strncmp(input, "//", 2) == 0) {
+        free((void*)delimiters);  // Free the custom delimiter if it was used
+    }
+
     return result;
 }
