@@ -64,9 +64,9 @@ int add(const char* input) {
     int result = sum_tokens(input_copy, delimiters);  // Calculate the sum of the tokens
 
     free(input_copy);  // Free the duplicated string
-    if (strncmp(input, "//", 2) == 0) {
-        free((void*)delimiters);  // Free the custom delimiter if it was used
-    }
+    // if (strncmp(input, "//", 2) == 0) {
+    //     free((void*)delimiters);  // Free the custom delimiter if it was used
+    // }
 
     return result;
 }
