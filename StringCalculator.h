@@ -20,7 +20,7 @@ int sum_tokens(char* input_copy, const char* delimiters) {
         }
         token = strtok(NULL, delimiters);  // Move to the next token
     }
-    
+
     return sum;
 }
 
@@ -41,6 +41,15 @@ char* prepare_input(const char* input, const char** delimiters) {
     return strdup(input);  // No custom delimiter, return the original input
 }
 
+// Function to replace custom delimiters with the default delimiter
+void replace_custom_delimiter(char* input_copy, const char* custom_delimiter) {
+    char* pos = input_copy;
+    while ((pos = strstr(pos, custom_delimiter)) != NULL) {
+        strncpy(pos, ",", 1);  // Replace the custom delimiter with a comma
+        pos += 1;  // Move past the comma
+    }
+}
+
 // Function to add numbers in a string
 int add(const char* input) {
     // Return 0 for an empty string or invalid first character
@@ -51,15 +60,9 @@ int add(const char* input) {
     const char* delimiters = ",\n";  // Default delimiters: comma and newline
     char* input_copy = prepare_input(input, &delimiters);  // Prepare input and get custom delimiter if present
 
-    // If custom delimiter is defined, adjust strtok to use it correctly
-    char* result = input_copy; // Store the input_copy to prevent memory leaks
-    for (char* p = input_copy; *p; p++) {
-        if (*p == ';') {
-            *p = ','; // Replace custom delimiter with the default
-        }
-    }
+    replace_custom_delimiter(input_copy, delimiters);  // Replace custom delimiters with comma
 
-    int result_sum = sum_tokens(result, delimiters);  // Calculate the sum of the tokens
+    int result_sum = sum_tokens(input_copy, delimiters);  // Calculate the sum of the tokens
 
     free(input_copy);  // Free the duplicated string
     if (strncmp(input, "//", 2) == 0) {
