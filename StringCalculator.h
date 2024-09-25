@@ -1,26 +1,29 @@
+
+Copy code
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
 #include <ctype.h>
 
-// Function to add numbers in a string
+// Function to add numbers in a string with reduced CCN
 int add(const char* input) {
-    // Return 0 for an empty string or invalid first character
+    // If input is empty or starts with an invalid character, return 0
     if (strlen(input) == 0 || (!isdigit(input[0]) && input[0] != '-')) {
         return 0;
     }
-    
-    int sum = 0;
-    char* input_copy = strdup(input);  // Duplicate input string to avoid modifying original
-    char* token = strtok(input_copy, ",");  // Split the string by commas
 
-    while (token != NULL) {
-        // Convert each token to an integer and add to the sum
-        sum += atoi(token);
-        token = strtok(NULL, ",");  // Move to the next token
+    int sum = 0;
+    const char* ptr = input;
+    
+    while (*ptr) {
+        // Convert the current number to integer and add to sum
+        sum += strtol(ptr, (char**)&ptr, 10);
+
+        // If there is a comma, move past it
+        if (*ptr == ',') {
+            ptr++;
+        }
     }
 
-    free(input_copy);  // Free the duplicated string
     return sum;
 }
-
