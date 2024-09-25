@@ -20,6 +20,7 @@ int sum_tokens(char* input_copy) {
         }
         token = strtok(NULL, ",\n");  // Move to the next token
     }
+
     
     return sum;
 }
