@@ -1,17 +1,26 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
-#include <assert.h>
-
+#include <ctype.h>
 
 // Function to add numbers in a string
 int add(const char* input) {
-    // Return for empty string
-    if (strlen(input) == 0 || !isdigit(input[0])) {
+    // Return 0 for an empty string or invalid first character
+    if (strlen(input) == 0 || (!isdigit(input[0]) && input[0] != '-')) {
         return 0;
     }
     
-    // Convert the valid numeric string to an integer and return it
-    return atoi(input);
+    int sum = 0;
+    char* input_copy = strdup(input);  // Duplicate input string to avoid modifying original
+    char* token = strtok(input_copy, ",");  // Split the string by commas
+
+    while (token != NULL) {
+        // Convert each token to an integer and add to the sum
+        sum += atoi(token);
+        token = strtok(NULL, ",");  // Move to the next token
+    }
+
+    free(input_copy);  // Free the duplicated string
+    return sum;
 }
 
