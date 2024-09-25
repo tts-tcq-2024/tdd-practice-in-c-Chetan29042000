@@ -8,13 +8,16 @@ int is_valid_input(const char* input) {
     return strlen(input) > 0 && (isdigit(input[0]) || input[0] == '-');
 }
 
-// Helper function to sum up the numbers from a tokenized string
+// Helper function to sum up numbers from a tokenized string, ignoring numbers > 1000
 int sum_tokens(char* input_copy) {
     int sum = 0;
     char* token = strtok(input_copy, ",");  // Split the string by commas
 
     while (token != NULL) {
-        sum += atoi(token);  // Convert each token to an integer and add to the sum
+        int number = atoi(token);  // Convert each token to an integer
+        if (number <= 1000) {  // Ignore numbers greater than 1000
+            sum += number;
+        }
         token = strtok(NULL, ",");  // Move to the next token
     }
     
