@@ -10,7 +10,14 @@ int add(const char* numbers) {
         return 0;
     }
     
-    // Convert the input string to an integer and return it
+    // Check if the input contains only digits
+    for (int i = 0; numbers[i] != '\0'; i++) {
+        if (!isdigit(numbers[i])) {
+            return 0;  // Return 0 for non-numeric input
+        }
+    }
+
+    // Convert the valid numeric string to an integer and return it
     return atoi(numbers);
 }
 
