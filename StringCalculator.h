@@ -14,17 +14,3 @@ int add(const char* numbers) {
     return atoi(numbers);
 }
 
-// Test case function
-void TEST_StringCalculatorAddTests_ExpectZeroForSingleZero() {
-    int expectedresult = 0;
-    const char* input = "0";
-    int result = add(input);
-    assert(result == expectedresult);
-    printf("Test Passed: Expected %d, Got %d\n", expectedresult, result);
-}
-
-int main() {
-    // Run the test
-    TEST_StringCalculatorAddTests_ExpectZeroForSingleZero();
-    return 0;
-}
