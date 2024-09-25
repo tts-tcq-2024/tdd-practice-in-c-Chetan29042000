@@ -51,12 +51,20 @@ int add(const char* input) {
     const char* delimiters = ",\n";  // Default delimiters: comma and newline
     char* input_copy = prepare_input(input, &delimiters);  // Prepare input and get custom delimiter if present
 
-    int result = sum_tokens(input_copy, delimiters);  // Calculate the sum of the tokens
+    // If custom delimiter is defined, adjust strtok to use it correctly
+    char* result = input_copy; // Store the input_copy to prevent memory leaks
+    for (char* p = input_copy; *p; p++) {
+        if (*p == ';') {
+            *p = ','; // Replace custom delimiter with the default
+        }
+    }
+
+    int result_sum = sum_tokens(result, delimiters);  // Calculate the sum of the tokens
 
     free(input_copy);  // Free the duplicated string
     if (strncmp(input, "//", 2) == 0) {
         free((void*)delimiters);  // Free the custom delimiter if it was used
     }
 
-    return result;
+    return result_sum;
 }
