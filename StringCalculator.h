@@ -38,6 +38,21 @@ const char* get_custom_delimiter(const char* input, char** remaining_input) {
     return NULL;  // Invalid format, return NULL
 }
 
+// Helper function to get the custom delimiter and remaining input
+const char* get_custom_delimiter(const char* input, char** remaining_input) {
+    const char* newline_pos = strchr(input, '\n');
+    if (newline_pos != NULL) {
+        size_t delimiter_len = newline_pos - input - 2;  // Length of the delimiter
+        char* custom_delimiter = (char*)malloc(delimiter_len + 1);
+        strncpy(custom_delimiter, input + 2, delimiter_len);
+        custom_delimiter[delimiter_len] = '\0';  // Null-terminate the string
+
+        *remaining_input = strdup(newline_pos + 1);  // Set remaining input
+        return custom_delimiter;  // Return the custom delimiter
+    }
+    return NULL;  // Invalid format
+}
+
 // Main function to add numbers in a string
 int add(const char* input) {
     // Return 0 for an empty string or invalid first character
@@ -56,7 +71,7 @@ int add(const char* input) {
             return 0;  // Invalid format
         }
         delimiters = custom_delimiter;  // Use the custom delimiter
-        input_copy = remaining_input;
+        input_copy = remaining_input;  // Set the remaining input
     } else {
         input_copy = strdup(input);  // No custom delimiter, just duplicate the input
     }
@@ -64,9 +79,9 @@ int add(const char* input) {
     int result = sum_tokens(input_copy, delimiters);  // Calculate the sum of the tokens
 
     free(input_copy);  // Free the duplicated string
-    // if (strncmp(input, "//", 2) == 0) {
-    //     free((void*)delimiters);  // Free the custom delimiter if it was used
-    // }
+    if (strncmp(input, "//", 2) == 0) {
+        free((void*)delimiters);  // Free the custom delimiter if it was used
+    }
 
     return result;
 }
